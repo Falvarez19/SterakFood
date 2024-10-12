@@ -25,4 +25,5 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='blog/logout.html'), name='logout'),
     path('categoria/<int:pk>/', views.posts_por_categoria, name='posts_por_categoria'),  # Nueva URL para filtrar por categoría
+    path('post/eliminar/<int:pk>/', views.eliminar_post, name='eliminar_post'),
 ]

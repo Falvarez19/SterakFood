@@ -3,6 +3,20 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from .models import Post, Comentario, Categoria
 from .forms import ComentarioForm, CustomUserCreationForm
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
+
+#para que solo los admin o miembros del staff puedan eliminar archivos
+@staff_member_required
+
+def eliminar_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, 'El post ha sido eliminado con éxito.')
+        return redirect('post_list')
+    return render(request, 'blog/eliminar_post_confirmacion.html', {'post': post})
+
 
 # Vista para la lista de publicaciones
 def post_list(request):
