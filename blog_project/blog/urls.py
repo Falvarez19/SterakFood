@@ -17,7 +17,7 @@ Including another URLconf
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import logout_view, contacto, PostCreateView, PostUpdateView
+from .views import logout_view, contacto, PostCreateView, PostUpdateView, perfil, change_password
 
 
 urlpatterns = [
@@ -31,4 +31,6 @@ urlpatterns = [
     path('contacto/', contacto, name='contacto'),
     path('post/new/', PostCreateView.as_view(), name='post_new'),
     path('post/<int:pk>/edit/', PostUpdateView.as_view(), name='post_edit'),
+    path('perfil/', perfil, name='perfil'),
+    path('cambiar_contraseña/', change_password, name='cambiar_contraseña'),
 ]

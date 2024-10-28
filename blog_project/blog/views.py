@@ -2,13 +2,47 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from .models import Post, Comentario, Categoria, Post
-from .forms import ComentarioForm, CustomUserCreationForm, ContactForm, PostForm
+from .forms import ComentarioForm, CustomUserCreationForm, ContactForm, PostForm, UserUpdateForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def perfil(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.userprofile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            return redirect('perfil')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.userprofile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+    return render(request, 'blog/perfil.html', context)
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            return redirect('perfil')
+    else:
+        form = CustomPasswordChangeForm(request.user)
+    return render(request, 'blog/cambiar_contraseña.html', {'form': form})
+
 
 #para que solo los admin o miembros del staff puedan eliminar archivos
 @staff_member_required
@@ -122,7 +156,6 @@ def contacto(request):
         form = ContactForm()
 
     return render(request, 'blog/contacto.html', {'form': form})
-
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):

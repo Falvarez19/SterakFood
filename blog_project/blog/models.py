@@ -17,12 +17,7 @@ class Post(models.Model):
     imagen = models.ImageField(upload_to='posts/', blank=True, null=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
-
-
+        
     def __str__(self):
         return self.titulo
     
@@ -36,3 +31,4 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f'Comentario de {self.autor.username} en {self.post.titulo}'
+    

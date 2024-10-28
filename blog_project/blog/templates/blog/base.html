@@ -25,15 +25,15 @@
           <a class="nav-link active" aria-current="page" href="{% url 'post_list' %}">Inicio</a>
         </li>
 
-        <!-- Dropdown de Categorías (funciona con clic para desplegarse) -->
+        <!-- Dropdown de Categorías -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Categorías
+            Categorías
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {% for categoria in categorias %}
-                  <li><a class="dropdown-item" href="{% url 'posts_por_categoria' categoria.pk %}">{{ categoria.nombre }}</a></li>
-              {% endfor %}
+            {% for categoria in categorias %}
+              <li><a class="dropdown-item" href="{% url 'posts_por_categoria' categoria.pk %}">{{ categoria.nombre }}</a></li>
+            {% endfor %}
           </ul>
         </li>
 
@@ -42,7 +42,7 @@
           <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
         </li>
 
-        <!-- Autenticación de Usuario -->
+        <!-- Autenticación y usuario -->
         {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
@@ -52,6 +52,12 @@
           </li>
           <li class="nav-item">
             <a href="{% url 'post_new' %}" class="btn btn-primary">Crear Post</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'perfil' %}" class="btn btn-info">Mi Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'cambiar_contraseña' %}" class="btn btn-warning">Cambiar Contraseña</a>
           </li>
         {% else %}
           <li class="nav-item">
