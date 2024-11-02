@@ -10,10 +10,10 @@
                 <div class="card">
                     <!-- Mostrar imagen si existe -->
                     {% if post.imagen %}
-                        <img src="{{ post.imagen.url }}" class="card-img-top" alt="{{ post.titulo }}">
+                        <img src="{{ post.imagen.url }}" class="card-img-top img-fluid" alt="{{ post.titulo }}">
                     {% else %}
                         <!-- Mostrar un placeholder si no hay imagen -->
-                        <img src="{% static 'images/placeholder.png' %}" class="card-img-top" alt="Imagen no disponible">
+                        <img src="{% static 'images/placeholder.png' %}" class="card-img-top img-fluid" alt="Imagen no disponible">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ post.titulo }}</h5>

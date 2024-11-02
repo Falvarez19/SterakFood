@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="col-md-6">
+        <h2 class="text-center">Editar Perfil</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <!-- Botón de Guardar Cambios con estilo pequeño y centrado -->
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

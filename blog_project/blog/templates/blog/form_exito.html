@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Éxito{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Mensaje Enviado</h2>
+    <p>Gracias por contactarnos. Te responderemos pronto.</p>
+    <a href="{% url 'contacto' %}" class="btn btn-primary mt-3">Volver al Formulario de Contacto</a>
+</div>
+{% endblock %}

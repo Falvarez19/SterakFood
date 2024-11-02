@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Mensajería</h1>
+    <p>Selecciona un usuario para iniciar una conversación:</p>
+    <ul>
+    {% for user in users %}
+        <li><a href="{% url 'conversation' user.username %}">{{ user.username }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

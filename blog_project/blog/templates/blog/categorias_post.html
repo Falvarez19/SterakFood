@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Posts en la categoría: {{ categoria.nombre }}</h2>
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ post.imagen.url }}" class="card-img-top" alt="{{ post.titulo }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.titulo }}</h5>
+                        <p class="card-text">{{ post.subtitulo }}</p>
+                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Leer Más</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay posts en esta categoría.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

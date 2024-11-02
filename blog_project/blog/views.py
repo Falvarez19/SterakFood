@@ -1,53 +1,24 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate, logout
-from .models import Post, Comentario, Categoria, Post
-from .forms import ComentarioForm, CustomUserCreationForm, ContactForm, PostForm, UserUpdateForm
+from .models import Post, Comentario, Categoria, Message
+from .forms import ComentarioForm, ContactForm, PostForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.contrib.auth.models import User
 
-@login_required
-def perfil(request):
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.userprofile)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            return redirect('perfil')
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.userprofile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form
-    }
-    return render(request, 'blog/perfil.html', context)
-
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = CustomPasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            return redirect('perfil')
-    else:
-        form = CustomPasswordChangeForm(request.user)
-    return render(request, 'blog/cambiar_contraseña.html', {'form': form})
-
+#home
+def home_view(request):
+    return render(request, 'blog/home.html')
 
 #para que solo los admin o miembros del staff puedan eliminar archivos
 @staff_member_required
 
-def eliminar_post(request, pk):
+def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
         post.delete()
@@ -85,38 +56,6 @@ def post_detail(request, pk):
         'comentario_form': comentario_form
     })
 
-# Registro de usuario
-def registro(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('post_list')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'blog/registro.html', {'form': form})
-
-# Inicio de sesión
-def iniciar_sesion(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('post_list')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'registration/login.html', {'form': form})
-
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('login')  # Suponiendo que tienes una URL de login llamada 'login'
 
 # Filtro de posts por categoría
 def posts_por_categoria(request, pk):
@@ -129,6 +68,8 @@ def post_list(request):
     posts = Post.objects.all()
     categorias = Categoria.objects.all()  # Obteniendo todas las categorías
     return render(request, 'blog/post_list.html', {'posts': posts, 'categorias': categorias})
+
+
 
 def contacto(request):
     if request.method == 'POST':
@@ -143,32 +84,69 @@ def contacto(request):
                     'Mensaje de {}'.format(nombre),
                     mensaje,
                     email,
-                    ['tuemail@example.com'],
+                    ['thereyalxx@gmail.com'], 
                     fail_silently=False,
                 )
                 messages.success(request, 'Tu mensaje ha sido enviado exitosamente.')
             except Exception as e:
                 messages.error(request, 'Hubo un error al enviar tu mensaje.')
-                # Aquí podrías registrar el error en un archivo log si es necesario
 
-            return redirect('success_url')
+            return redirect('form_exito')  # Redirige a la vista de éxito
     else:
         form = ContactForm()
-
     return render(request, 'blog/contacto.html', {'form': form})
 
+def form_exito(request):
+    return render(request, 'blog/form_exito.html')
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['titulo', 'subtitulo', 'cuerpo', 'imagen', 'categoria']
-    success_url = reverse_lazy('post_list')  # Asegúrate de definir a dónde redirigir después de crear el post
+    fields = ['titulo', 'subtitulo', 'descripcion', 'imagen', 'categoria']
+    success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
-        form.instance.autor = self.request.user  # Asigna el autor al post
+        form.instance.autor = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categorias'] = Categoria.objects.all()  # Asegúrate de que la consulta es correcta
+        return context
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
     success_url = reverse_lazy('post_list')
+
+def categorias_context(request):
+    categorias = Categoria.objects.all()
+    return {'categorias': categorias}
+
+def categoria_posts(request, categoria_id):
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+    posts = Post.objects.filter(categoria=categoria)
+    return render(request, 'blog/categoria_posts.html', {'categoria': categoria, 'posts': posts})
+
+@login_required
+def messaging_home(request):
+    users = User.objects.exclude(id=request.user.id)
+    return render(request, 'blog/home_mensajeria.html', {'users': users})
+
+@login_required
+def conversation(request, username):
+    # Obtiene el usuario con el que el usuario actual está conversando
+    other_user = get_object_or_404(User, username=username)
+
+    # Filtra los mensajes entre el usuario actual y el otro usuario
+    messages = Message.objects.filter(
+        Q(sender=request.user, receiver=other_user) | Q(sender=other_user, receiver=request.user)
+    ).order_by('timestamp')
+
+    # Si se envía un mensaje nuevo
+    if request.method == 'POST':
+        content = request.POST.get('message')
+        if content:
+            Message.objects.create(sender=request.user, receiver=other_user, content=content)
+            return redirect('conversation', username=other_user.username)
+
+    return render(request, 'blog/conversacion.html', {'messages': messages, 'other_user': other_user})

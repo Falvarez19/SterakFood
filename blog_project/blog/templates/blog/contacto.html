@@ -3,7 +3,8 @@
 {% block title %}Contacto{% endblock %}
 
 {% block content %}
-    <h1>Formulario de Contacto</h1>
+<div class="container mt-5 registro-container">
+    <h2>Formulario de Contacto</h2>
     {% if messages %}
     <ul>
         {% for message in messages %}
@@ -12,9 +13,10 @@
     </ul>
     {% endif %}
     
-    <form method="post">
+    <form method="post" class="form-centered">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Enviar</button>
+        <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
+</div>
 {% endblock %}

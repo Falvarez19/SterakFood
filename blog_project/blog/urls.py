@@ -15,22 +15,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from . import views
+from blog import views
 from django.contrib.auth import views as auth_views
-from .views import logout_view, contacto, PostCreateView, PostUpdateView, perfil, change_password
+from .views import PostCreateView, PostUpdateView
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
-    path('registro/', views.registro, name='registro'),
-    path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('categoria/<int:pk>/', views.posts_por_categoria, name='posts_por_categoria'),  # Nueva URL para filtrar por categoría
-    path('post/eliminar/<int:pk>/', views.eliminar_post, name='eliminar_post'),
-    path('contacto/', contacto, name='contacto'),
+    path('categoria/<int:pk>/', views.posts_por_categoria, name='posts_por_categoria'), 
+    path('post/<int:pk>/delete/', views.post_delete, name='post_delete'),
+    path('contacto/', views.contacto, name='contacto'),
+    path('form_exito/', views.form_exito, name='form_exito'),
     path('post/new/', PostCreateView.as_view(), name='post_new'),
     path('post/<int:pk>/edit/', PostUpdateView.as_view(), name='post_edit'),
-    path('perfil/', perfil, name='perfil'),
-    path('cambiar_contraseña/', change_password, name='cambiar_contraseña'),
+    path('categoria/<int:categoria_id>/', views.categoria_posts, name='categoria_posts'),
+    path('messaging/', views.messaging_home, name='messaging_home'),
+    path('messaging/<str:username>/', views.conversation, name='conversation'),
+    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+from django.views.generic import TemplateView
+
+urlpatterns += [
+    path('about/', TemplateView.as_view(template_name='blog/about.html'), name='about'),
 ]

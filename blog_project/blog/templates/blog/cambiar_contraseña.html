@@ -1,9 +1,0 @@
-<!-- users/change_password.html -->
-{% extends 'base_generic.html' %}
-{% block content %}
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Cambiar Contraseña</button>
-</form>
-{% endblock %}

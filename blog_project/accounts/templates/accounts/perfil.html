@@ -1,0 +1,34 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div>
+    <h2>Perfil de {{ user.username }}</h2>
+    <p>Email: {{ user.email }}</p>
+    <p>Nombre: {{ profile.nombre }}</p>
+    <p>Apellido: {{ profile.apellido }}</p>
+    <p>Fecha de Nacimiento: {{ profile.birth_date }}</p>
+
+    <!-- Mostrar la imagen de perfil si está disponible -->
+    {% if profile.imagen_perfil %}
+        <img src="{{ profile.imagen_perfil.url }}" alt="Imagen de perfil" width="150" height="150">
+    {% else %}
+        <p>No tienes una imagen de perfil.</p>
+    {% endif %}
+
+    <hr>
+    
+    <!-- Botón para editar perfil -->
+    <a href="{% url 'perfil_editar' %}" class="btn btn-primary">Editar Información</a>
+
+    <hr>
+
+    <h3>Mis Posts</h3>
+    <ul>
+        {% for post in posts %}
+            <li>{{ post.titulo }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

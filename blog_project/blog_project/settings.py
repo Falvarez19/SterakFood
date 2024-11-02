@@ -28,13 +28,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # formulario
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'f.alvarezarg@gmail.com'
-EMAIL_HOST_PASSWORD = 'a1b2c3d4'
-
+EMAIL_HOST_USER = 'thereyalxx@gmail.com'
+EMAIL_HOST_PASSWORD = 'rt78123qw'
 
 # Application definition
 
@@ -72,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blog.views.categorias_context'
             ],
         },
     },
@@ -140,3 +140,8 @@ STATIC_URL = '/static/'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'post_list'
 LOGOUT_REDIRECT_URL = 'post_list'
+
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
