@@ -14,18 +14,20 @@
 
     <p class="ingredientes-texto">{{ post.descripcion }}</p>
     
-    {% if user.is_authenticated and user.is_staff %}
-        <!-- Botón de eliminar post para administradores -->
-        <form action="{% url 'post_delete' post.id %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm">Eliminar Post</button>
-        </form>
-    {% endif %}
+    <div class="d-flex gap-2 mb-3" style="max-width: 300px;">
+        {% if user.is_authenticated and user.is_staff %}
+            <!-- Botón de eliminar post para administradores -->
+            <form action="{% url 'post_delete' post.id %}" method="post" style="display:inline; flex: 1;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm w-100">Eliminar Post</button>
+            </form>
+        {% endif %}
 
-    {% if request.user == post.author or request.user.is_superuser %}
-        <!-- Botón de editar post para el autor o administradores -->
-        <a href="{% url 'editar_post' post.id %}" class="btn btn-primary btn-sm">Editar Post</a>
-    {% endif %}
+        {% if request.user == post.author or request.user.is_superuser %}
+            <!-- Botón de editar post para el autor o administradores -->
+            <a href="{% url 'editar_post' post.id %}" class="btn btn-primary btn-sm w-100" style="flex: 1;">Editar Post</a>
+        {% endif %}
+    </div>
 
     <hr>
 
