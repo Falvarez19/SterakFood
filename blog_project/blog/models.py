@@ -10,6 +10,9 @@ from django.contrib.auth import get_user_model
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.nombre
+
 class Post(models.Model):
     titulo = models.CharField(max_length=200)
     subtitulo = models.CharField(max_length=200)

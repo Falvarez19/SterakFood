@@ -1,13 +1,46 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Editar Post</h2>
-    <form method="post" enctype="multipart/form-data">
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4 text-center">Editar Post</h2>
+    <form method="post" enctype="multipart/form-data" class="p-4 border rounded bg-light">
         {% csrf_token %}
-        {{ form.as_p }}
         
-        <button type="submit" class="btn btn-primary btn-sm">Guardar Cambios</button>
-        <a href="{% url 'post_list' %}" class="btn btn-secondary btn-sm">Cancelar</a>
+        <!-- Título -->
+        <div class="mb-3">
+            {{ form.titulo.label_tag }}
+            {{ form.titulo }}
+        </div>
+        
+        <!-- Subtítulo -->
+        <div class="mb-3">
+            {{ form.subtitulo.label_tag }}
+            {{ form.subtitulo }}
+        </div>
+        
+        <!-- Descripción -->
+        <div class="mb-3">
+            {{ form.descripcion.label_tag }}
+            {{ form.descripcion }}
+        </div>
+        
+        <!-- Imagen -->
+        <div class="mb-3">
+            {{ form.imagen.label_tag }}
+            {{ form.imagen }}
+        </div>
+        
+        <!-- Categoría -->
+        <div class="mb-3">
+            {{ form.categoria.label_tag }}
+            {{ form.categoria }}
+        </div>
+
+        <!-- Botones de Guardar y Cancelar -->
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-primary btn-sm w-50">Guardar Cambios</button>
+            <a href="{% url 'post_list' %}" class="btn btn-danger btn-sm w-50 ms-2">Cancelar</a>
+        </div>
     </form>
 </div>
+{% endblock %}

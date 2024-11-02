@@ -23,7 +23,7 @@
             </form>
         {% endif %}
 
-        {% if request.user == post.author or request.user.is_superuser %}
+        {% if request.user == post.autor or request.user.is_superuser %}
             <!-- Botón de editar post para el autor o administradores -->
             <a href="{% url 'editar_post' post.id %}" class="btn btn-primary btn-sm w-100" style="flex: 1;">Editar Post</a>
         {% endif %}

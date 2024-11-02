@@ -17,11 +17,16 @@ class ContactForm(forms.Form):
 
     #para poder crear posts
 class PostForm(forms.ModelForm):
-    categoria = forms.ModelChoiceField(queryset=Categoria.objects.all(), empty_label="Seleccione una categoría")
-
     class Meta:
         model = Post
-        fields = ['titulo', 'subtitulo', 'descripcion', 'imagen', 'categoria']  
+        fields = ['titulo', 'subtitulo', 'descripcion', 'imagen', 'categoria']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+            'subtitulo': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
+            'imagen': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'categoria': forms.Select(attrs={'class': 'form-control'}),
+        } 
         
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post

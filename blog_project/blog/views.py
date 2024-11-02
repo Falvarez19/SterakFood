@@ -117,16 +117,11 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
-    success_url = reverse_lazy('post_list')  # Redirige a la lista de posts tras editar
+    success_url = reverse_lazy('post_list')
 
-    # Este método define la condición para permitir acceso
     def test_func(self):
-        post = self.get_object()  # Obtiene el objeto Post que se está editando
-        return self.request.user == post.author or self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        # Opcional: redirige a la lista de posts o muestra un mensaje si no tiene permisos
-        return redirect('post_list')  # Redirige si el usuario no tiene permisos
+        post = self.get_object()
+        return self.request.user == post.autor or self.request.user.is_superuser
 
 def categorias_context(request):
     categorias = Categoria.objects.all()
