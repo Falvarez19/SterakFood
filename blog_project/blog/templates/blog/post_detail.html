@@ -18,8 +18,13 @@
         <!-- Botón de eliminar post para administradores -->
         <form action="{% url 'post_delete' post.id %}" method="post" style="display:inline;">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Eliminar Post</button>
+            <button type="submit" class="btn btn-danger btn-sm">Eliminar Post</button>
         </form>
+    {% endif %}
+
+    {% if request.user == post.author or request.user.is_superuser %}
+        <!-- Botón de editar post para el autor o administradores -->
+        <a href="{% url 'editar_post' post.id %}" class="btn btn-primary btn-sm">Editar Post</a>
     {% endif %}
 
     <hr>
@@ -44,7 +49,7 @@
             <label for="texto">Texto:</label>
             <textarea id="texto" name="texto" rows="4" class="form-control" placeholder="Escribe tu comentario aquí"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Enviar comentario</button>
+        <button type="submit" class="btn btn-primary btn-sm mt-2">Enviar comentario</button>
     </form>
 </div>
 {% endblock %}

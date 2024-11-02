@@ -34,6 +34,7 @@ urlpatterns = [
     path('categoria/<int:categoria_id>/', views.categoria_posts, name='categoria_posts'),
     path('messaging/', views.messaging_home, name='messaging_home'),
     path('messaging/<str:username>/', views.conversation, name='conversation'),
+    path('editar/<int:pk>/', PostUpdateView.as_view(), name='editar_post'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

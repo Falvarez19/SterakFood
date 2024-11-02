@@ -5,11 +5,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
+
 
 #home
 def home_view(request):
@@ -112,11 +113,20 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['categorias'] = Categoria.objects.all()  # Asegúrate de que la consulta es correcta
         return context
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
-    success_url = reverse_lazy('post_list')
+    success_url = reverse_lazy('post_list')  # Redirige a la lista de posts tras editar
+
+    # Este método define la condición para permitir acceso
+    def test_func(self):
+        post = self.get_object()  # Obtiene el objeto Post que se está editando
+        return self.request.user == post.author or self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        # Opcional: redirige a la lista de posts o muestra un mensaje si no tiene permisos
+        return redirect('post_list')  # Redirige si el usuario no tiene permisos
 
 def categorias_context(request):
     categorias = Categoria.objects.all()

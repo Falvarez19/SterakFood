@@ -1,10 +1,13 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<h1>Crear/Editar Post</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
-{% endblock %}
+<div class="container mt-5">
+    <h2>Editar Post</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn btn-primary btn-sm">Guardar Cambios</button>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary btn-sm">Cancelar</a>
+    </form>
+</div>
