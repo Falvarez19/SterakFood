@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7n(*lgvr8fikxfhk_9(x9(i+wv#cnc+uvh5%lc8@ls$yao69x@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['sterakfood.onrender.com']
+ALLOWED_HOSTS = [sterakfood.onrender.com]
 
 # formulario
 EEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -125,7 +125,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Archivos cargados por el usuario (opcional)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -133,15 +138,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# URL to use when referring to static files located in STATIC_ROOT.
-STATIC_URL = '/static/'
-
 #login y creacion de usuario
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'post_list'
 LOGOUT_REDIRECT_URL = 'post_list'
 
-import os
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
