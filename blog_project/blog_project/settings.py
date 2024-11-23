@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7n(*lgvr8fikxfhk_9(x9(i+wv#cnc+uvh5%lc8@ls$yao69x@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [sterakfood.onrender.com]
+ALLOWED_HOSTS = ['sterakfood.onrender.com']
 
 # formulario
 EEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
