@@ -122,14 +122,16 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+# URL para acceder a los archivos estáticos
+STATIC_URL = '/static/'
 
-STATIC_URL = '/static/*'
+# Directorio donde se recopilarán los archivos estáticos
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Archivos cargados por el usuario (opcional)
+# URL para acceder a los archivos cargados por los usuarios
 MEDIA_URL = '/media/'
+
+# Directorio donde se almacenarán los archivos cargados por los usuarios
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
