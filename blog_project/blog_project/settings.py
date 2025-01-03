@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7n(*lgvr8fikxfhk_9(x9(i+wv#cnc+uvh5%lc8@ls$yao69x@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*, .fly.dev']
 
 # formulario
 EEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
