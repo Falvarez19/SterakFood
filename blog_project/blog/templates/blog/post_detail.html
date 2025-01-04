@@ -45,13 +45,17 @@
     <hr>
 
     <h4>Deja un comentario</h4>
-    <form method="post" class="mt-4">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="texto">Texto:</label>
-            <textarea id="texto" name="texto" rows="4" class="form-control" placeholder="Escribe tu comentario aquí"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary btn-sm mt-2">Enviar comentario</button>
-    </form>
+    {% if user.is_authenticated %}
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="texto">Texto:</label>
+                <textarea id="texto" name="texto" rows="4" class="form-control" placeholder="Escribe tu comentario aquí"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mt-2">Enviar comentario</button>
+        </form>
+    {% else %}
+        <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para dejar un comentario.</p>
+    {% endif %}
 </div>
 {% endblock %}

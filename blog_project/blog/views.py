@@ -41,6 +41,9 @@ def post_detail(request, pk):
     comentarios = Comentario.objects.filter(post=post)
     
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect('login')  # Redirige al inicio de sesión si no está autenticado
+        
         comentario_form = ComentarioForm(request.POST)
         if comentario_form.is_valid():
             nuevo_comentario = comentario_form.save(commit=False)
@@ -56,7 +59,6 @@ def post_detail(request, pk):
         'comentarios': comentarios,
         'comentario_form': comentario_form
     })
-
 
 # Filtro de posts por categoría
 def posts_por_categoria(request, pk):
