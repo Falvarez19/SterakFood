@@ -1,24 +1,26 @@
-# Usar una imagen base oficial de Python
-FROM python:3.8-slim
+ARG PYTHON_VERSION=3.12-slim
 
-# Establece el directorio de trabajo en el contenedor
-WORKDIR /app
+FROM python:${PYTHON_VERSION}
 
-# Instalar dependencias del sistema necesarias
-RUN apt-get update && apt-get install -y libpq-dev gcc
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Copiar el archivo de requisitos y instalar las dependencias de Python
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN mkdir -p /code
 
-# Copiar el resto del código fuente de la aplicación al contenedor
-COPY . .
+WORKDIR /code
 
-# Exponer el puerto en el que se ejecutará la aplicación
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+COPY . /code
+
+ENV SECRET_KEY "jKqOj2R6SVH0kILwtTzpd3Bc2HRPwHo7dZJJT72bCNyJ0woiiv"
+
 EXPOSE 8000
 
-# Comando para ejecutar la aplicación
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "blog_project.wsgi:application"]
+CMD ["gunicorn","--bind",":8000","--workers","2","blog_project.wsgi"]
 
-#para la db
-COPY db.sqlite3 /blog_project/
+RUN python manage.py migrate --noinput
+RUN python manage.py collectstatic --noinput

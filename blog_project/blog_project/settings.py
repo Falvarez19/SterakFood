@@ -12,8 +12,16 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +33,7 @@ SECRET_KEY = 'django-insecure-7n(*lgvr8fikxfhk_9(x9(i+wv#cnc+uvh5%lc8@ls$yao69x@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*, .fly.dev']
+ALLOWED_HOSTS = ['sterakfood.fly.dev', 'localhost', '127.0.0.1']
 
 # formulario
 EEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -56,8 +64,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ROOT_URLCONF = 'blog_project.urls'
 import os
 TEMPLATES = [
@@ -78,6 +87,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'blog_project.wsgi.application'
+
+CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev', 'https://sterakfood.fly.dev']
 
 
 # Database
@@ -122,17 +133,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# URL para acceder a los archivos estáticos
-STATIC_URL = '/static/'
-
-# Directorio donde se recopilarán los archivos estáticos
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# URL para acceder a los archivos cargados por los usuarios
-MEDIA_URL = '/media/'
-
-# Directorio donde se almacenarán los archivos cargados por los usuarios
-MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -144,5 +144,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'post_list'
 LOGOUT_REDIRECT_URL = 'post_list'
-
 
